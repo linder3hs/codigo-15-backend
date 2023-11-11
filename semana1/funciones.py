@@ -38,8 +38,7 @@ def average(*notas):
 
 average(10, 20, 17, 18)
 average(19)
-print("-"*40)
-
+print("-" * 40)
 
 print("==== Kwargs ====")
 
