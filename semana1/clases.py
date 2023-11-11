@@ -30,9 +30,37 @@ class Person:
         return self.__dni
 
 
+"""
+Herencia: Es permite que podamos reutilizar atributos y funciones de otra clase,
+las clases deben estar de alguna manera
+"""
+
+
+class Student(Person):
+    def __init__(self, name, lastname, phone_number, age, dni, email, courses):
+        super().__init__(name, lastname, phone_number, age, dni)
+        self.email = email
+        self.courses = courses
+
+    def get_name_email(self):
+        print(f"{self.name} {self.lastname} - {self.email}")
+
+
 # El llamar a una clase se la dice instanciar
 persona1 = Person("Pepe", "Zapata", 99999, 52, "72812143")
 persona1.phone_number = 989652132
 persona1.saludar()
 print(persona1.format_phone_number())
 print(persona1.get_dni())
+
+student1 = Student(
+    "Jaun",
+    "Perez",
+    888838383,
+    24,
+    "718282828",
+    "juan@tecsup.edu.pe",
+    ["React", "Python", "JS", "Angular"]
+)
+
+student1.saludar()
