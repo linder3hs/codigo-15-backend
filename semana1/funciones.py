@@ -46,7 +46,7 @@ print("==== Kwargs ====")
 
 def persona(**datos):
     # Diccion key:value
-    # print(datos)
+    print(datos)
     print("====KEYS====")
     for key in datos.keys():
         print(key)
