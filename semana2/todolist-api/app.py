@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, request
 from datetime import date
 from utils import search_task, response_success, response_error
 
