@@ -10,15 +10,15 @@ def search_task(tasks, task_id):
     return result
 
 
-def response_success(data):
+def response_success(data, status=200):
     return jsonify({
         "ok": True,
         "data": data
-    })
+    }), status
 
 
-def response_error(data):
+def response_error(data, status=500):
     return jsonify({
         "data": data,
         "ok": False
-    })
+    }), status
