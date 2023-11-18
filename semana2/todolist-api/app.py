@@ -79,5 +79,21 @@ def update_task(task_id):
     })
 
 
+@app.route("/tasks/<int: task_id>", methods=['DELETE'])
+def delete_task(task_id):
+    task = search_task(tasks, task_id)
+    if task is None:
+        return jsonify({
+            "ok": False,
+            "data": "Task not found"
+        })
+
+    tasks.remove(task)
+    return jsonify({
+        "ok": True,
+        "data": "Task deleted"
+    })
+
+
 if __name__ == "__main__":
     app.run(debug=True)
