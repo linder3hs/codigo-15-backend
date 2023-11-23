@@ -44,28 +44,40 @@ def add_task():
         return response_success("Tarea creada correctamente", 201)
     except Exception as e:
         return response_error(str(e))
-#
-#
-# @task_route.route("/tasks/<int:task_id>", methods=["PUT"])
-# def update_task(task_id):
-#     task = search_task(tasks, task_id)
-#
-#     if task is None:
-#         return response_error("Task not found")
-#
-#     new_task = request.json
-#     task["title"] = new_task.get("title", task["title"])
-#     task["category"] = new_task.get("category", task["category"])
-#     task["priority"] = new_task.get("priority", task["priority"])
-#
-#     return response_success("Tarea actualizada correctamente")
-#
-#
-# @task_route.route("/tasks/<int:task_id>", methods=['DELETE'])
-# def delete_task(task_id):
-#     task = search_task(tasks, task_id)
-#     if task is None:
-#         return response_error("Task not found")
-#
-#     tasks.remove(task)
-#     return response_success("Task deleted")
+
+
+@task_route.route("/tasks/<int:task_id>", methods=["PUT"])
+def update_task(task_id):
+    try:
+        task = Task.query.get(task_id)
+
+        if task is None:
+            return response_error("Task not found")
+
+        new_task = request.json
+        task.title = new_task.get("title", task.title)
+        task.category = new_task.get("category", task.category)
+        task.priority = new_task.get("priority", task.priority)
+        task.status = new_task.get("status", task.status)
+        task.is_done = new_task.get("is_done", task.is_done)
+        task.due_date = new_task.get("due_date", task.due_date)
+
+        db.session.commit()
+
+        return response_success("Tarea actualizada correctamente")
+    except Exception as e:
+        return response_error(str(e))
+
+
+@task_route.route("/tasks/<int:task_id>", methods=['DELETE'])
+def delete_task(task_id):
+    try:
+        task = Task.query.get(task_id)
+        if task is None:
+            return response_error("Task not found")
+
+        db.session.delete(task)
+        db.session.commit()
+        return response_success("Task deleted")
+    except Exception as e:
+        return response_error(str(e))
