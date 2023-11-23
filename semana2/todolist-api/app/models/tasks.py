@@ -2,6 +2,8 @@ from app.db import db
 
 
 class Task(db.Model):
+    __tablename__ = "tasks"
+
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     title = db.Column(db.String(255))
     priority = db.Column(db.String(255))
@@ -17,3 +19,14 @@ class Task(db.Model):
         self.status = status
         self.due_date = due_date
         self.is_done = is_done
+
+    def to_json(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'priority': self.priority,
+            'category': self.category,
+            'status': self.status,
+            'due_date': self.due_date,
+            'is_done': self.is_done
+        }
