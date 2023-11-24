@@ -11,14 +11,16 @@ class Task(db.Model):
     status = db.Column(db.String(50))
     due_date = db.Column(db.Date())
     is_done = db.Column(db.Boolean)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
 
-    def __init__(self, title, priority, category, status, due_date, is_done):
+    def __init__(self, title, priority, category, status, due_date, is_done, user_id):
         self.title = title
         self.priority = priority
         self.category = category
         self.status = status
         self.due_date = due_date
         self.is_done = is_done
+        self.user_id = user_id
 
     def to_json(self):
         return {
@@ -28,5 +30,6 @@ class Task(db.Model):
             'category': self.category,
             'status': self.status,
             'due_date': self.due_date,
-            'is_done': self.is_done
+            'is_done': self.is_done,
+            'user_id': self.user_id
         }
