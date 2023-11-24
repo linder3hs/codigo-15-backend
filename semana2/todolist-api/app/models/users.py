@@ -23,3 +23,13 @@ class User(db.Model):
         self.address = address
         self.password = password
         self.phone = phone
+
+    def to_json(self):
+        return {
+            'id': self.id,
+            'full_name': f"{self.name} {self.lastname}",
+            'username': self.username,
+            'email': self.email,
+            'phone': self.phone,
+            'address': self.address,
+        }
