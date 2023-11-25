@@ -5,7 +5,6 @@ from sqlalchemy.exc import IntegrityError
 from app.crypt import bcrypt
 from app.db import db
 
-
 user_route = Blueprint('user_route', __name__)
 
 
@@ -48,7 +47,7 @@ def add_user():
 
 
 @user_route.route("/users/<int:user_id>", methods=["PUT"])
-def update_update(user_id):
+def update_user(user_id):
     try:
         user = User.query.get(user_id)
 
@@ -66,5 +65,21 @@ def update_update(user_id):
         db.session.commit()
 
         return response_success("Tarea actualizada correctamente")
+    except Exception as e:
+        return response_error(str(e))
+
+
+@user_route.route("/users/<int:user_id>", methods=['DELETE'])
+def detele_user(user_id):
+    try:
+        user = User.query.get(user_id)
+
+        if not user:
+            return response_error("User not found")
+
+        db.session.delete(user)
+        db.session.commit()
+
+        return response_success("User deleted")
     except Exception as e:
         return response_error(str(e))
