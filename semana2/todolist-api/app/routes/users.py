@@ -23,9 +23,9 @@ def get_users():
 def add_user():
     try:
         user = User(**request.get_json())
-        print(bcrypt.generate_password_hash(user.password))
-        # db.session.add(user)
-        # db.session.commit()
+        user.password = bcrypt.generate_password_hash(user.password)
+        db.session.add(user)
+        db.session.commit()
 
         return response_success("Usuario creado correctamente", 201)
     except IntegrityError:
