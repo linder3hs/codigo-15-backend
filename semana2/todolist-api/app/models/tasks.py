@@ -11,7 +11,7 @@ class Task(db.Model):
     status = db.Column(db.String(50))
     due_date = db.Column(db.Date())
     is_done = db.Column(db.Boolean)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = db.relationship('User', backref='tasks', lazy=True)
 
     def __init__(self, title, priority, category, status, due_date, is_done, user_id):
