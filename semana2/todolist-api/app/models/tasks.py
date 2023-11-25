@@ -32,5 +32,9 @@ class Task(db.Model):
             'status': self.status,
             'due_date': self.due_date,
             'is_done': self.is_done,
-            'user_id': self.user_id
+            'user': {
+                'id': self.user.id,
+                'user_name': self.user.username,
+                'email': self.user.email
+            }
         }
