@@ -1,6 +1,7 @@
 from flask import Blueprint, request
 from utils import response_success, response_error
 from app.models.users import User
+from app.models.tasks import Task
 from sqlalchemy.exc import IntegrityError
 from app.crypt import bcrypt
 from app.db import db
@@ -72,14 +73,41 @@ def update_user(user_id):
 @user_route.route("/users/<int:user_id>", methods=['DELETE'])
 def detele_user(user_id):
     try:
-        user = User.query.get(user_id)
+        # ante de eliminar al usuario vamos a verificar que el no tenga tareas
+        tasks_by_user = Task.query.filter_by(user_id=user_id).all()
+
+        if len(tasks_by_user) is 0:
+            user = User.query.get(user_id)
+
+            if not user:
+                return response_error("User not found")
+
+            db.session.delete(user)
+            db.session.commit()
+
+            return response_success("User deleted")
+        return response_success("El usuario no puede ser eliminado porque tiene tareas pendientes")
+
+    except Exception as e:
+        return response_error(str(e))
+
+
+@user_route.route("/users/login", methods=['POST'])
+def login():
+    try:
+        body = request.get_json()
+        email = body.get("email")
+        password = body.get("password")
+
+        user = User.query.filter_by(email=email).first()
 
         if not user:
-            return response_error("User not found")
+            return response_error("Email y/o Password incorrectos")
+        # parametro 1: es el password encriptado
+        # parametro 2: password sin encriptar
+        if not bcrypt.check_password_hash(user.password, password):
+            return response_error("Email y/o Password incorrectos")
 
-        db.session.delete(user)
-        db.session.commit()
-
-        return response_success("User deleted")
+        return response_success(user.to_json())
     except Exception as e:
         return response_error(str(e))
