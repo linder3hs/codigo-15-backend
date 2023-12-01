@@ -5,6 +5,8 @@ from app.models.tasks import Task
 from sqlalchemy.exc import IntegrityError
 from app.crypt import bcrypt
 from app.db import db
+from flask_jwt_extended import create_access_token
+from datetime import timedelta
 
 user_route = Blueprint('user_route', __name__)
 
@@ -92,7 +94,7 @@ def detele_user(user_id):
         return response_error(str(e))
 
 
-@user_route.route("/users/login", methods=['POST'])
+@user_route.route("/login", methods=['POST'])
 def login():
     try:
         body = request.get_json()
@@ -108,6 +110,11 @@ def login():
         if not bcrypt.check_password_hash(user.password, password):
             return response_error("Email y/o Password incorrectos")
 
-        return response_success(user.to_json())
+        # nota por defecto el token dura 15 min
+        token = create_access_token(identity=user.email, expires_delta=timedelta(weeks=2))
+        return response_success({
+            'user': user.to_json(),
+            'access_token': token
+        })
     except Exception as e:
         return response_error(str(e))
