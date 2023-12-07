@@ -2,6 +2,7 @@ class Book:
     books = []
 
     def __init__(self, title=None, isbn=None, author=None, description=None, summary=None, image_url=None):
+        self.id = id(isbn)
         self.title = title
         self.isbn = isbn
         self.author = author
@@ -23,6 +24,7 @@ class Book:
 
     def to_json(self):
         return {
+            "id": self.id,
             "title": self.title,
             "isbn": self.isbn,
             "author": self.author,
