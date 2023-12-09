@@ -18,7 +18,7 @@ def create_book():
         new_book = Book(**data)
         book.insert_book(new_book)
 
-        return jsonify({"message": "Libro creado correctament"}), 201
+        return jsonify({"message": "Libro creado correctamente"}), 201
     except Exception as e:
         return jsonify({"message": str(e)})
 
@@ -26,8 +26,18 @@ def create_book():
 @books.route("/books/<int:book_id>")
 def get_book(book_id):
     try:
-        searched = book.search_book_by_id(book_id)
-        print("searched", searched)
+        searched = book.search_book_by_id(int(book_id))
+        if not searched:
+            return jsonify({"message": "No se encontro el libro"})
         return searched
+    except Exception as e:
+        return jsonify({"message": str(e)})
+
+
+# TODO: UPDATE
+@books.route("/books/<int:book_id>", methods=['DELETE'])
+def delete_book(book_id):
+    try:
+        return jsonify({"message": book.delete_book_by_id(int(book_id))})
     except Exception as e:
         return jsonify({"message": str(e)})
