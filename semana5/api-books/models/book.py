@@ -24,8 +24,27 @@ class Book:
 
         if book_searched is not None:
             return book_searched.to_json()
-
         return None
+
+    def insert_book(self, book):
+        book.id = len(self.books) + 1
+        self.books.append(book)
+
+    def update_book(self, book_id, json_from_postman):
+        book_searched = self.search_book(book_id)
+
+        if book_searched is None:
+            return "Libro no encontrado"
+
+        # si no actualiza la info
+        book_searched.title = json_from_postman.get("title", book_searched.title)
+        book_searched.author = json_from_postman.get("author", book_searched.author)
+        book_searched.isbn = json_from_postman.get("isbn", book_searched.isbn)
+        book_searched.image_url = json_from_postman.get("image_url", book_searched.image_url)
+        book_searched.summary = json_from_postman.get("summary", book_searched.summary)
+        book_searched.description = json_from_postman.get("description", book_searched.description)
+
+        return book_searched.to_json()
 
     def delete_book_by_id(self, book_id):
         current_book = self.search_book(book_id)
@@ -34,10 +53,6 @@ class Book:
             return 'Eliminado correctamente'
         except Exception as e:
             return str(e)
-
-    def insert_book(self, book):
-        book.id = len(self.books) + 1
-        self.books.append(book)
 
     def to_json(self):
         return {

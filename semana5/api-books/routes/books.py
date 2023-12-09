@@ -31,13 +31,21 @@ def get_book(book_id):
             return jsonify({"message": "No se encontro el libro"})
         return searched
     except Exception as e:
-        return jsonify({"message": str(e)})
+        return jsonify({"message": str(e)}), 500
 
 
-# TODO: UPDATE
+@books.route("/<int:book_id>", methods=["PUT"])
+def update_book(book_id):
+    try:
+        json_from_postman = request.get_json()
+        return jsonify({"message": book.update_book(book_id, json_from_postman)})
+    except Exception as e:
+        return jsonify({"message": str(e)}), 500
+
+
 @books.route("/<int:book_id>", methods=['DELETE'])
 def delete_book(book_id):
     try:
         return jsonify({"message": book.delete_book_by_id(book_id)})
     except Exception as e:
-        return jsonify({"message": str(e)})
+        return jsonify({"message": str(e)}), 500
