@@ -29,7 +29,6 @@ class Book:
 
     def delete_book_by_id(self, book_id):
         current_book = self.search_book(book_id)
-        print("current_book", current_book)
         try:
             self.books.remove(current_book)
             return 'Eliminado correctamente'
