@@ -1,3 +1,6 @@
+from utils import generate_id, search_book
+
+
 class Book:
     books = []
 
@@ -13,25 +16,19 @@ class Book:
     def list_books(self):
         return [item.to_json() for item in self.books]
 
-    def search_book(self, book_id):
-        for book in self.books:
-            if book.id == book_id:
-                return book
-        return None
-
     def search_book_by_id(self, book_id):
-        book_searched = self.search_book(book_id)
+        book_searched = search_book(self.books, book_id)
 
         if book_searched is not None:
             return book_searched.to_json()
         return None
 
     def insert_book(self, book):
-        book.id = len(self.books) + 1
+        book.id = generate_id(self.books)
         self.books.append(book)
 
     def update_book(self, book_id, json_from_postman):
-        book_searched = self.search_book(book_id)
+        book_searched = search_book(self.books, book_id)
 
         if book_searched is None:
             return "Libro no encontrado"
@@ -47,7 +44,7 @@ class Book:
         return book_searched.to_json()
 
     def delete_book_by_id(self, book_id):
-        current_book = self.search_book(book_id)
+        current_book = search_book(self.books, book_id)
         try:
             self.books.remove(current_book)
             return 'Eliminado correctamente'
