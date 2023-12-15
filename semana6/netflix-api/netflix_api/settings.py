@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'subscription',
     'actor',
-    'content'
+    'content',
+    'drf_yasg'
 ]
 
 MIDDLEWARE = [
