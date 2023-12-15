@@ -1,8 +1,8 @@
-from django.http import JsonResponse
+from rest_framework.viewsets import ModelViewSet
+from .models import Subscription
+from .serializers import SubscriptionSerializer
 
 
-def index(request):
-    return JsonResponse({
-        "ok": True,
-        "data": "Hola mundo"
-    })
+class SubscriptionViewSet(ModelViewSet):
+    queryset = Subscription.objects.all() # select * from subscription
+    serializer_class = SubscriptionSerializer
