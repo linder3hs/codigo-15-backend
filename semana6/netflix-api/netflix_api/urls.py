@@ -15,11 +15,14 @@ schema_view = get_schema_view(
   permission_classes=(AllowAny,)
 )
 
+api_version = "api/v1/"
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/', include('actor.urls')),
-    path('api/v1/', include('subscription.urls')),
-    path('api/v1/', include('content.urls')),
+    path(api_version, include('actor.urls')),
+    path(api_version, include('subscription.urls')),
+    path(api_version, include('content.urls')),
+    path(api_version, include('user.urls')),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc-ui')
 ]

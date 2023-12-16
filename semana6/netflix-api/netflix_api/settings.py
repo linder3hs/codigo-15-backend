@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'subscription',
     'actor',
     'content',
-    'drf_yasg'
+    'drf_yasg',
+    'user'
 ]
 
 MIDDLEWARE = [
