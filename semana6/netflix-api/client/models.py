@@ -1,9 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
+from subscription.models import Subscription
 
 
 class Client(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
+    subscription = models.OneToOneField(
+        Subscription, on_delete=models.CASCADE, null=True)
+    payment_date = models.DateField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -26,6 +30,6 @@ class Profile(models.Model):
 
     def __str__(self) -> str:
         return self.name
-    
+
     class Meta:
         db_table = "profile"
