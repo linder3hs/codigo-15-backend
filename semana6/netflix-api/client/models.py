@@ -1,13 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import User
 from subscription.models import Subscription
+from django.core.validators import MaxValueValidator
 
 
 class Client(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     subscription = models.OneToOneField(
         Subscription, on_delete=models.CASCADE, null=True)
-    payment_date = models.DateField(null=True)
+    payment_day = models.PositiveIntegerField(
+        validators=[MaxValueValidator(31)], null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
