@@ -2,6 +2,7 @@ from rest_framework.viewsets import ModelViewSet
 from .serializers import PaymentSerializer
 from .models import Payment
 import requests
+from decouple import config
 
 
 class PaymentViewSet(ModelViewSet):
@@ -25,7 +26,7 @@ class PaymentViewSet(ModelViewSet):
             'https://api.mercadopago.com/v1/payments',
             json=data,
             headers={
-                'Authorization': 'Bearer <completar>',
+                'Authorization': f'Bearer {config("MERCADOPAGO_ACCESS_TOKEN")}',
                 'Content-Type': 'application/json'
             }
         )
