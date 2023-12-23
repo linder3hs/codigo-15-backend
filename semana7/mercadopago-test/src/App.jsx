@@ -1,4 +1,5 @@
 import { initMercadoPago, CardPayment } from "@mercadopago/sdk-react";
+import { storePayment } from "./services";
 
 initMercadoPago(import.meta.env.VITE_MERCADOPAGO_PUBLIC_KEY);
 
@@ -7,8 +8,9 @@ export default function App() {
     amount: 500,
   };
 
-  const handleOnSubmit = (formData) => {
+  const handleOnSubmit = async (formData) => {
     console.log(formData);
+    await storePayment(formData);
   };
 
   return (

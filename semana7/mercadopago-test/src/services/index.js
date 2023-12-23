@@ -20,6 +20,20 @@ export async function storePayment(data) {
       amount: data.transaction_amount,
       client: 3,
     };
+
+    const response = await fetch(`${BASE_URL}payment/`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify(body),
+    });
+
+    const responseData = await response.json();
+
+    console.log(responseData);
+
+    return responseData;
   } catch (error) {
     console.log(`Error: ${error.message}`);
   }
