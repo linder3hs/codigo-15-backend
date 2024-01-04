@@ -3,6 +3,7 @@
 
 import express from "express";
 import { searchById } from "./utils.js";
+import { responseSuccess, responseError } from "./responses.js";
 
 const app = express();
 app.use(express.json());
@@ -26,26 +27,17 @@ const users = [
 
 // vamos a minificar esto
 app.get("/", (_req, res) => {
-  return res.json({
-    ok: true,
-    data: users,
-  });
+  return responseSuccess({ res, data: users });
 });
 
 app.get("/:id", (req, res) => {
   const user = searchById(users, Number(req.params.id));
 
   if (!user) {
-    return res.json({
-      ok: false,
-      data: "User not found",
-    });
+    return responseError({ res, data: "User not found" });
   }
 
-  return res.json({
-    ok: true,
-    data: user,
-  });
+  return responseSuccess({ res, data: user });
 });
 
 app.post("/", (req, res) => {
@@ -54,20 +46,14 @@ app.post("/", (req, res) => {
 
   users.push(user);
 
-  return res.status(201).json({
-    ok: true,
-    data: "User created",
-  });
+  return responseSuccess({ res, data: "User created", status: 201 });
 });
 
 app.put("/:id", (req, res) => {
   const user = searchById(users, Number(req.params.id));
 
   if (!user) {
-    return res.json({
-      ok: false,
-      data: "User not found",
-    });
+    return responseError({ res, data: "User not found" });
   }
 
   const body = req.body;
@@ -76,28 +62,18 @@ app.put("/:id", (req, res) => {
     user[key] = value;
   });
 
-  return res.json({
-    ok: true,
-    data: "User updated",
-  });
+  return responseSuccess({ res, data: "User updated" });
 });
 
 app.delete("/:id", (req, res) => {
   const user = searchById(users, Number(req.params.id));
 
   if (!user) {
-    return res.json({
-      ok: false,
-      data: "User not found",
-    });
+    return responseError({ res, data: "User not found" });
   }
 
   users.splice(user, 1);
-
-  return res.json({
-    ok: true,
-    data: "User deleted",
-  });
+  return responseSuccess({ res, data: "User deleted" });
 });
 
 app.listen(3000, function () {
