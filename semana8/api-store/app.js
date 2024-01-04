@@ -15,10 +15,36 @@ const users = [
   },
 ];
 
-app.get("/", function (request, response) {
-  return response.json({
+// app.get("/", function (request, response) {
+//   return response.json({
+//     ok: true,
+//     data: users,
+//   });
+// });
+
+// vamos a minificar esto
+app.get("/", (_req, res) => {
+  return res.json({
     ok: true,
     data: users,
+  });
+});
+
+app.get("/:id", (req, res) => {
+  // Toda la informacion de URL es de tipo String
+  const id = Number(req.params.id);
+  const user = users.find((user) => user.id === id);
+
+  if (!user) {
+    return res.json({
+      ok: false,
+      data: "User not found",
+    });
+  }
+
+  return res.json({
+    ok: true,
+    data: user,
   });
 });
 
