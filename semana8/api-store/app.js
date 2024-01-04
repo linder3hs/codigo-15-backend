@@ -60,6 +60,28 @@ app.post("/", (req, res) => {
   });
 });
 
+app.put("/:id", (req, res) => {
+  const user = searchById(users, Number(req.params.id));
+
+  if (!user) {
+    return res.json({
+      ok: false,
+      data: "User not found",
+    });
+  }
+
+  const body = req.body;
+
+  Object.entries(body).forEach(([key, value]) => {
+    user[key] = value;
+  });
+
+  return res.json({
+    ok: true,
+    data: "User updated",
+  });
+});
+
 app.delete("/:id", (req, res) => {
   const user = searchById(users, Number(req.params.id));
 
