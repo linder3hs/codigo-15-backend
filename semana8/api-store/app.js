@@ -2,8 +2,10 @@
 // const express = require("express");
 
 import express from "express";
+import { searchById } from "./utils.js";
 
 const app = express();
+app.use(express.json());
 
 const users = [
   {
@@ -31,9 +33,7 @@ app.get("/", (_req, res) => {
 });
 
 app.get("/:id", (req, res) => {
-  // Toda la informacion de URL es de tipo String
-  const id = Number(req.params.id);
-  const user = users.find((user) => user.id === id);
+  const user = searchById(users, Number(req.params.id));
 
   if (!user) {
     return res.json({
@@ -45,6 +45,36 @@ app.get("/:id", (req, res) => {
   return res.json({
     ok: true,
     data: user,
+  });
+});
+
+app.post("/", (req, res) => {
+  const user = req.body;
+  user.id = users.length + 1;
+
+  users.push(user);
+
+  return res.status(201).json({
+    ok: true,
+    data: "User created",
+  });
+});
+
+app.delete("/:id", (req, res) => {
+  const user = searchById(users, Number(req.params.id));
+
+  if (!user) {
+    return res.json({
+      ok: false,
+      data: "User not found",
+    });
+  }
+
+  users.splice(user, 1);
+
+  return res.json({
+    ok: true,
+    data: "User deleted",
   });
 });
 
