@@ -20,50 +20,67 @@ app.get("/", async (_req, res) => {
   }
 });
 
-app.get("/:id", (req, res) => {
-  const user = searchById(users, Number(req.params.id));
+app.get("/:id", async (req, res) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: Number(req.params.id),
+      },
+    });
 
-  if (!user) {
-    return responseError({ res, data: "User not found" });
+    if (!user) {
+      return responseError({ res, data: "User not found" });
+    }
+
+    return responseSuccess({ res, data: user });
+  } catch (error) {
+    return responseError({ res, data: error.message });
   }
-
-  return responseSuccess({ res, data: user });
 });
 
-app.post("/", (req, res) => {
-  const user = req.body;
-  user.id = users.length + 1;
+app.post("/", async (req, res) => {
+  try {
+    await prisma.user.create({
+      data: req.body,
+    });
 
-  users.push(user);
-
-  return responseSuccess({ res, data: "User created", status: 201 });
+    return responseSuccess({ res, data: "User created", status: 201 });
+  } catch (error) {
+    return responseError({ res, data: error.message });
+  }
 });
 
-app.put("/:id", (req, res) => {
-  const user = searchById(users, Number(req.params.id));
+app.put("/:id", async (req, res) => {
+  try {
+    const user = await prisma.user.update({
+      where: {
+        id: Number(req.params.id),
+      },
+      data: req.body,
+    });
 
-  if (!user) {
-    return responseError({ res, data: "User not found" });
+    if (!user) {
+      return responseError({ res, data: "User not found" });
+    }
+
+    return responseSuccess({ res, data: "User updated" });
+  } catch (error) {
+    return responseError({ res, data: error.message });
   }
-
-  const body = req.body;
-
-  Object.entries(body).forEach(([key, value]) => {
-    user[key] = value;
-  });
-
-  return responseSuccess({ res, data: "User updated" });
 });
 
-app.delete("/:id", (req, res) => {
-  const user = searchById(users, Number(req.params.id));
+app.delete("/:id", async (req, res) => {
+  try {
+    await prisma.user.delete({
+      where: {
+        id: Number(req.params.id),
+      },
+    });
 
-  if (!user) {
-    return responseError({ res, data: "User not found" });
+    return responseSuccess({ res, data: "User deleted" });
+  } catch (error) {
+    return responseError({ res, data: error.message });
   }
-
-  users.splice(user, 1);
-  return responseSuccess({ res, data: "User deleted" });
 });
 
 app.listen(3000, function () {
