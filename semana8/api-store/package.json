@@ -2,10 +2,10 @@
   "name": "api-store",
   "version": "1.0.0",
   "description": "mi primera API con NodeJS",
-  "main": "app.js",
+  "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "node --watch app.js"
+    "dev": "node --watch index.js"
   },
   "keywords": [
     "API",

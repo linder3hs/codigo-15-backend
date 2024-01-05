@@ -1,12 +1,8 @@
-// Forma antigua
-// const express = require("express");
-
 import express from "express";
-import { searchById } from "./utils.js";
-import { responseSuccess, responseError } from "./responses.js";
+import { responseSuccess, responseError } from "./network/responses.js";
 import { PrismaClient } from "@prisma/client";
 
-const app = express();
+export const app = express();
 app.use(express.json());
 
 const prisma = new PrismaClient();
@@ -81,8 +77,4 @@ app.delete("/:id", async (req, res) => {
   } catch (error) {
     return responseError({ res, data: error.message });
   }
-});
-
-app.listen(3000, function () {
-  console.log("El servidor inicio en el puerto 3000 http://localhost:3000");
 });
