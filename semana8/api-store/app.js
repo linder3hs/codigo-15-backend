@@ -4,30 +4,20 @@
 import express from "express";
 import { searchById } from "./utils.js";
 import { responseSuccess, responseError } from "./responses.js";
+import { PrismaClient } from "@prisma/client";
 
 const app = express();
 app.use(express.json());
 
-const users = [
-  {
-    id: 1,
-    name: "Linder",
-    lastname: "Hassinger",
-    email: "linder@gmail.com",
-    password: "linder340",
-  },
-];
+const prisma = new PrismaClient();
 
-// app.get("/", function (request, response) {
-//   return response.json({
-//     ok: true,
-//     data: users,
-//   });
-// });
-
-// vamos a minificar esto
-app.get("/", (_req, res) => {
-  return responseSuccess({ res, data: users });
+app.get("/", async (_req, res) => {
+  try {
+    const users = await prisma.user.findMany(); //SELECT * FROM users;
+    return responseSuccess({ res, data: users });
+  } catch (error) {
+    return responseError({ res, data: error.message });
+  }
 });
 
 app.get("/:id", (req, res) => {
