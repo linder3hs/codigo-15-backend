@@ -1,5 +1,6 @@
 import { responseSuccess, responseError } from "../../network/responses";
 import { prisma } from "../../db";
+import { mapInsertProduct } from "./utils";
 
 export async function list(req, res) {
   try {
@@ -13,27 +14,13 @@ export async function list(req, res) {
 
 export async function store(req, res) {
   try {
-    const { product, category } = req.body;
+    const { ok, data } = mapInsertProduct(req.body);
 
-    const productMap = {
-      ...product,
-      isNew: product.is_new,
-      pertangeDiscount: product.pertange_discount,
-    };
+    if (!ok) {
+      return responseError({ res, data });
+    }
 
-    delete productMap.is_new;
-    delete productMap.pertange_discount;
-
-    const newProduct = await prisma.product.create({
-      data: {
-        ...productMap,
-        category: {
-          create: {
-            ...category,
-          },
-        },
-      },
-    });
+    const newProduct = await prisma.product.create({ data });
 
     return responseSuccess({ res, data: newProduct });
   } catch (error) {
