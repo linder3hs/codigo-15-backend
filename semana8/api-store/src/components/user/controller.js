@@ -1,12 +1,12 @@
 import { PrismaClient } from "@prisma/client";
-import { responseSuccess, responseError } from "../../network/responses.js";
+import { responseSuccess, responseError } from "../../network/responses";
 
 const prisma = new PrismaClient();
 
 export async function list(req, res) {
   try {
     const users = await prisma.user.findMany();
-    return responseSuccess({ res, data: users });
+    return responseSuccess({ res, data: users, status: 203 });
   } catch (error) {
     return responseError({ res, data: error.message });
   }

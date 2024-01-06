@@ -1,5 +1,5 @@
 import express from "express";
-import userRouter from "./components/user/network.js";
+import { userRouter } from "./components";
 
 export const app = express();
 app.use(express.json());

@@ -3,9 +3,8 @@
   "version": "1.0.0",
   "description": "mi primera API con NodeJS",
   "main": "index.js",
-  "type": "module",
   "scripts": {
-    "dev": "node --watch index.js"
+    "dev": "nodemon --exec babel-node index.js"
   },
   "keywords": [
     "API",
@@ -19,6 +18,11 @@
     "express": "4.18.2"
   },
   "devDependencies": {
+    "@babel/cli": "7.23.4",
+    "@babel/core": "7.23.7",
+    "@babel/node": "7.22.19",
+    "@babel/preset-env": "7.23.7",
+    "nodemon": "3.0.2",
     "prisma": "5.7.1"
   }
 }
