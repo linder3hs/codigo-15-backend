@@ -1,7 +1,5 @@
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "../../db";
 import { responseSuccess, responseError } from "../../network/responses";
-
-const prisma = new PrismaClient();
 
 export async function list(req, res) {
   try {
