@@ -4,5 +4,6 @@ import * as Controller from "./controller";
 const productRouter = Router();
 
 productRouter.route("/").get(Controller.list);
+productRouter.route("/").post(Controller.store);
 
 export default productRouter;
