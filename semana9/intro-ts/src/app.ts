@@ -1,13 +1,11 @@
-import express, { type Application, Request, Response } from "express";
+import express, { type Application } from "express";
 import cors from "cors";
+import { userRouter } from "./components";
 
 const app: Application = express();
 app.use(cors());
+app.use(express.json());
 
-app.get("/", (req: Request, res: Response): Response => {
-  return res.json({
-    message: "Hola mundo",
-  });
-});
+app.use("/api/v1/users", userRouter);
 
 export default app;
