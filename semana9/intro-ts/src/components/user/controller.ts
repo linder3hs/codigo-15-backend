@@ -2,6 +2,7 @@ import type { Response, Request } from "express";
 import { prisma } from "../../db";
 import { responseSuccess, responseError } from "../../network/responses";
 import { handleResponseError } from "../../utils";
+import { hash } from "../../crypto";
 
 export async function list(_req: Request, res: Response): Promise<Response> {
   try {
@@ -29,24 +30,26 @@ export async function getById(req: Request, res: Response): Promise<Response> {
   }
 }
 
-export async function store(req, res) {
+export async function store(req: Request, res: Response): Promise<Response> {
   try {
-    await prisma.user.create({
-      data: req.body,
-    });
+    req.body.password = hash(req.body.password);
+
+    await prisma.user.create({ data: req.body });
 
     return responseSuccess({ res, data: "User created", status: 201 });
   } catch (error) {
-    return responseError({ res, data: error.message });
+    return handleResponseError(res, error);
   }
 }
 
-export async function update(req, res) {
+export async function update(req: Request, res: Response): Promise<Response> {
   try {
+    if (req.body.password) {
+      req.body.password = hash(req.body.password);
+    }
+
     const user = await prisma.user.update({
-      where: {
-        id: Number(req.params.id),
-      },
+      where: { id: Number(req.params.id) },
       data: req.body,
     });
 
@@ -56,20 +59,16 @@ export async function update(req, res) {
 
     return responseSuccess({ res, data: "User updated" });
   } catch (error) {
-    return responseError({ res, data: error.message });
+    return handleResponseError(res, error);
   }
 }
 
-export async function destroy(req, res) {
+export async function destroy(req: Request, res: Response): Promise<Response> {
   try {
-    await prisma.user.delete({
-      where: {
-        id: Number(req.params.id),
-      },
-    });
+    await prisma.user.delete({ where: { id: Number(req.params.id) } });
 
     return responseSuccess({ res, data: "User deleted" });
   } catch (error) {
-    return responseError({ res, data: error.message });
+    return handleResponseError(res, error);
   }
 }
