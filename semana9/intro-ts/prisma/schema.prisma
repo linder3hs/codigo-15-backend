@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String?  @db.VarChar(255)
+  lastname  String?  @db.VarChar(255)
+  email     String   @unique @db.VarChar(255)
+  password  String   @db.VarChar(300)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model Product {
+  id               Int       @id @default(autoincrement())
+  title            String    @db.VarChar(255)
+  brand            String?   @db.VarChar(255)
+  price            Float     @db.Float
+  pertangeDiscount Float     @map("pertange_discount") @db.Float
+  isNew            Boolean   @default(true) @map("is_new") @db.TinyInt
+  categoryId       Int?      @map("catagory_id")
+  category         Category? @relation(fields: [categoryId], references: [id])
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  @@map("products")
+}
+
+model Category {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(255)
+  description String   @db.Text
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  Product Product[]
+
+  @@map("categories")
+}
