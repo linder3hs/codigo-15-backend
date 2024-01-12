@@ -1,11 +1,6 @@
-interface Item {
-  id: number;
-  name: string;
-}
-
-export function searchById(array: Item[], id: number): Item | undefined {
-  return array.find((item: Item) => item.id === id);
-}
+import type { Response } from "express";
+import { prismaError } from "../db";
+import { responseError } from "../network/responses";
 
 interface IResponse {
   ok: boolean;
@@ -17,4 +12,14 @@ export function response({ ok, data }: IResponse): IResponse {
     ok,
     data,
   };
+}
+
+export function handleResponseError(res: Response, error: unknown) {
+  if (error instanceof prismaError) {
+    return responseError({
+      res,
+      data: `DB Error(${error.code}): ${error.message}`,
+    });
+  }
+  return responseError({ res, data: `Error: ${error}` });
 }

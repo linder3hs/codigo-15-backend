@@ -1,23 +1,18 @@
 import type { Response, Request } from "express";
-import { prisma, prismaError } from "../../db";
+import { prisma } from "../../db";
 import { responseSuccess, responseError } from "../../network/responses";
+import { handleResponseError } from "../../utils";
 
-export async function list(_req: Request, res: Response) {
+export async function list(_req: Request, res: Response): Promise<Response> {
   try {
     const users = await prisma.user.findMany();
-    return responseSuccess({ res, data: users, status: 203 });
+    return responseSuccess({ res, data: users });
   } catch (error) {
-    if (error instanceof prismaError) {
-      return responseError({
-        res,
-        data: `DB Error(${error.code}): ${error.message}`,
-      });
-    }
-    return responseError({ res, data: `Error: ${error}` });
+    return handleResponseError(res, error);
   }
 }
 
-export async function getById(req, res) {
+export async function getById(req: Request, res: Response): Promise<Response> {
   try {
     const user = await prisma.user.findUnique({
       where: {
@@ -28,10 +23,9 @@ export async function getById(req, res) {
     if (!user) {
       return responseError({ res, data: "User not found" });
     }
-
     return responseSuccess({ res, data: user });
   } catch (error) {
-    return responseError({ res, data: error.message });
+    return handleResponseError(res, error);
   }
 }
 
